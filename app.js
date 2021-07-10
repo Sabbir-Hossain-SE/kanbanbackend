@@ -6,8 +6,10 @@ const dotenv = require('dotenv')
 const helmet = require('helmet')
 const morgan = require('morgan')
 const cookieparser = require('cookie-parser')
-const loginRouter = require('./router/loginRouter')
-const usersRouter = require('./router/usersRouter')
+const loginRouter = require('./routes/loginRouter')
+const usersRouter = require('./routes/usersRouter')
+const homeRouter = require('./routes/homeRouter')
+const commonApiRoute = require('./routes/commonApiRouter')
 
 dotenv.config()
 
@@ -24,7 +26,10 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log('Connected to MongoDB Successfully'))
-  .catch((err) => console.log(err))
+  .catch((err) => {
+    console.log(err)
+    process.exit(1)
+  })
 
 //built in middleware
 
@@ -38,14 +43,20 @@ app.use(morgan('common'))
 app.use(cookieparser(process.env.COOKIE_SECRET))
 
 //routing setup
-// app.get('/', loginRouter)
-app.get('/', usersRouter)
+app.use('/api', commonApiRoute)
+app.use('/api/login', loginRouter)
+app.use('/api/home', homeRouter)
+app.use('/api/users', usersRouter)
 
-//404 not found handler
-app.use(notFoundHandler)
+app.use(bodyParser.json({ limit: '30mb', extended: true }))
+app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
+app.use(cors())
 
-//common error handler
-app.use(errorHandler)
+// //404 not found handler
+// app.use(notFoundHandler)
+
+// //common error handler
+// app.use(errorHandler)
 app.listen(process.env.PORT, () => {
   console.log(`Backend server is running on port ${process.env.PORT}`)
 })
