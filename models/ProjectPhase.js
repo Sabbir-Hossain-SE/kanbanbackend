@@ -10,7 +10,7 @@ const phaseSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['ongoing', 'revised', 'done', 'queued'],
+      enum: ['ongoing', 'queued'],
       default: 'queued',
     },
     startDate: {

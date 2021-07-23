@@ -12,7 +12,11 @@ const projectSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-
+    status: {
+      type: String,
+      enum: ['active', 'inactive'],
+      default: 'inactive',
+    },
     userId: {
       type: String,
       required: true,

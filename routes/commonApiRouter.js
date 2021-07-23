@@ -3,7 +3,6 @@ const commonApiRoute = express.Router()
 
 const projectController = require('../controllers/projectController')
 const pahseController = require('../controllers/pahseController')
-const taskGroupController = require('../controllers/taskGroupController')
 const taskController = require('../controllers/taskController')
 
 // API router
@@ -44,10 +43,10 @@ commonApiRoute.delete('/phase/:id', pahseController.delete)
  * @method GET/POST/PUT/DELETE
  */
 
-commonApiRoute.post('/group', taskGroupController.create)
-commonApiRoute.get('/group', taskGroupController.find)
-commonApiRoute.put('/group/:id', taskGroupController.update)
-commonApiRoute.delete('/group/:id', taskGroupController.delete)
+// commonApiRoute.post('/group', taskGroupController.create)
+// commonApiRoute.get('/group', taskGroupController.find)
+// commonApiRoute.put('/group/:id', taskGroupController.update)
+// commonApiRoute.delete('/group/:id', taskGroupController.delete)
 
 /**
  * @description Connect with task group API
@@ -55,7 +54,7 @@ commonApiRoute.delete('/group/:id', taskGroupController.delete)
  */
 
 commonApiRoute.post('/task', taskController.create)
-commonApiRoute.get('/task', taskController.find)
+commonApiRoute.get('/task/', taskController.find)
 commonApiRoute.put('/task/:id', taskController.update)
 commonApiRoute.delete('/task/:id', taskController.delete)
 

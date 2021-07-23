@@ -2,18 +2,29 @@ const mongoose = require('mongoose')
 
 const taskSchema = mongoose.Schema(
   {
-    description: {
+    groupTitle: {
+      type: String,
+
+      default: 'To Do',
+    },
+    groupNumber: {
+      type: Number,
+      default: 1,
+    },
+    phaseId: {
       type: String,
       required: true,
-      trim: true,
     },
-    comment: {
-      type: String,
-      trim: true,
-    },
-    _groupId: {
-      type: String,
-      required: true,
+    taskItem: {
+      description: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      comment: {
+        type: String,
+        trim: true,
+      },
     },
   },
   {

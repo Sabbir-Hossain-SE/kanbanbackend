@@ -23,10 +23,11 @@ exports.create = (req, res) => {
 
 // retrieve and return all users/ retrive and return a single task
 exports.find = (req, res) => {
+  console.log(req.query.status)
   if (req.query.id) {
     const id = req.query.id
 
-    Task.find({ groupId: id })
+    Task.find({ phaseId: id })
       .then((data) => {
         if (!data) {
           res.status(404).send({ message: 'Not found user with id ' + id })
@@ -58,35 +59,39 @@ exports.update = (req, res) => {
   }
 
   const id = req.params.id
-  Task.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Cannot Update user with ${id}. Maybe user not found!`,
-        })
-      } else {
-        res.send(data)
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({ message: 'Error Update user information' })
-    })
+  if (id) {
+    Task.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+      .then((data) => {
+        if (!data) {
+          res.status(404).send({
+            message: `Cannot Update user with ${id}. Maybe user not found!`,
+          })
+        } else {
+          res.send(data)
+        }
+      })
+      .catch((err) => {
+        res.status(500).send({ message: 'Error Update user information' })
+      })
+  }
 }
 
 // Delete a user with specified task id in the request
 exports.delete = (req, res) => {
-  const id = req.params.id
+  const phaseId = req.params.id
 
-  Task.findByIdAndDelete(id)
+  Task.deleteMany({ phaseId })
     .then((data) => {
       if (!data) {
-        res
-          .status(404)
-          .send({ message: `Cannot Delete with id ${id}. Maybe id is wrong` })
+        res.status(404)
+        res.send({
+          message: `Cannot Delete with id ${phaseId}. Maybe id is wrong`,
+        })
       } else {
         res.send({
-          message: 'User was deleted successfully!',
+          message: `successfully deleted!`
         })
+        console.log('Delete Done');
       }
     })
     .catch((err) => {
@@ -95,14 +100,16 @@ exports.delete = (req, res) => {
       })
     })
 }
+// // delete many
+// exports.delete = async (req, res) => {
+//   console.log('*****************************')
+//   const phaseId = req.params.id
 
-// uid
-// 60e8da2f3a9a713b78d15bda
-// pid
-// 60e8db583a9a713b78d15bdc
+//   if (!mongoose.Types.ObjectId.isValid(phaseId))
+//     return await res.status(404).send(`No post with id: ${phaseId}`)
+//   console.log('fdgsgdsfgsdfg')
+//   await Task.deleteMany({ phaseId })
 
-// phid
-// 60e8dfe1ded002323cd53c6a gid(60e8e57718b1343e946c2060,60e8e5cd18b1343e946c2062,60e8e5ef18b1343e946c2064) tid(60e8e72689751533b0ad4ab0,60e8e74b89751533b0ad4ab2) tid(60e8e78089751533b0ad4ab4)tid(60e8e7a389751533b0ad4ab6 60e8e7b389751533b0ad4ab8)
-// 60e8e0741d0c4017ec81bfa9 gid(60e8e62418b1343e946c2066,60e8e64218b1343e946c2068, 60e8e65218b1343e946c206a)
-
-// gid
+//   await res.json({ message: 'task deleted successfully.' })
+//   console.log('*****************************')
+// }
